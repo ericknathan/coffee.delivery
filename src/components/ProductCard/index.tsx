@@ -30,6 +30,7 @@ export function ProductCard({ data }: ProductCardProps) {
     addItemToCart({
       product: data,
       quantity: productQuantity,
+      showToast: true,
     });
   }
 

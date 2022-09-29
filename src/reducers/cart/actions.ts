@@ -3,6 +3,7 @@ import { CartItem } from '../../contexts/CartContext';
 export enum ActionTypes {
   ADD_PRODUCT = 'ADD_PRODUCT',
   REMOVE_PRODUCT = 'REMOVE_PRODUCT',
+  CLEAR_CART = 'CLEAR_CART',
 }
 
 export function addItemToCartAction(item: CartItem) {
@@ -18,5 +19,11 @@ export function removeItemFromCartAction(productId: number) {
     payload: {
       productId,
     },
+  };
+}
+
+export function clearCartAction() {
+  return {
+    type: ActionTypes.CLEAR_CART,
   };
 }

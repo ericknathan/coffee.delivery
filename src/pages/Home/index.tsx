@@ -37,6 +37,7 @@ export function Home() {
 
   useEffect(() => {
     fetchProducts();
+    document.title = 'Coffee Delivery | Página inicial';
   }, []);
 
   return (

@@ -10,12 +10,27 @@ import {
   UserLocationButton,
 } from './styles';
 import coffeeDeliveryLogo from '../../assets/coffee-delivery-logo.svg';
+import { localStorageUserDataKey } from '../../utils/config';
+import { useEffect, useState } from 'react';
+import { api } from '../../lib/axios';
 
 export function Header() {
+  const [userAddress, setUserAddress] = useState(
+    localStorage.getItem(localStorageUserDataKey) || null,
+  );
   const navigate = useNavigate();
   const { cartItems } = useCart();
 
   const amountOfItemsInCart = Object.keys(cartItems).length || 0;
+
+  async function getUserAddress() {
+    const { data } = await api.get('https://json.geoiplookup.io/');
+    setUserAddress(`${data.city}, ${data.region.replace(/[\W_a-z]/g, '')}`);
+  }
+
+  useEffect(() => {
+    if (!userAddress) getUserAddress();
+  }, [userAddress]);
 
   return (
     <HeaderContainer>
@@ -28,7 +43,7 @@ export function Header() {
         <HeaderActionsContainer>
           <UserLocationButton>
             <MapPin size={22} weight="fill" />
-            Porto Alegre, RS
+            {userAddress}
           </UserLocationButton>
           <CartButton title="Carrinho" onClick={() => navigate('/checkout')}>
             {amountOfItemsInCart > 0 && (

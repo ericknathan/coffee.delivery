@@ -79,7 +79,7 @@ export const UserAddressCard = styled(BaseCard)`
         color: ${({ theme }) => theme['gray-600']};
       }
 
-      &[name='street'] {
+      &[name='address'] {
         grid-column: 1 / 4;
       }
 
@@ -97,6 +97,8 @@ export const UserAddressCard = styled(BaseCard)`
 
       font-size: 0.75rem;
       font-style: italic;
+
+      cursor: text;
     }
 
     @media (max-width: 790px) {
@@ -191,33 +193,45 @@ export const PaymentDataContainer = styled.div`
       font-size: 1.25rem;
     }
   }
-
-  button {
-    width: 100%;
-    padding: 0.75rem;
-    margin-top: 0.75rem;
-    border: none;
-    border-radius: 6px;
-
-    background-color: ${({ theme }) => theme['yellow-500']};
-    color: ${({ theme }) => theme.white};
-    outline-color: ${({ theme }) => theme['yellow-500']};
-
-    font-weight: 700;
-    font-size: 0.875rem;
-    text-transform: uppercase;
-
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-
-    &:hover {
-      background-color: ${({ theme }) => theme['yellow-700']};
-    }
-  }
 `;
 
 export const Divider = styled.hr`
   width: 100%;
   border: 1px solid ${({ theme }) => theme['gray-400']};
   margin: 1.5rem 0;
+`;
+
+export const EmptyCartContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+
+  svg {
+    color: ${({ theme }) => theme['purple-700']};
+  }
+`;
+
+export const PurchaseActionButton = styled.button`
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 0.75rem;
+  border: none;
+  border-radius: 6px;
+
+  background-color: ${({ theme }) => theme['yellow-500']};
+  color: ${({ theme }) => theme.white};
+  outline-color: ${({ theme }) => theme['yellow-500']};
+
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: ${({ theme }) => theme['yellow-700']};
+  }
 `;

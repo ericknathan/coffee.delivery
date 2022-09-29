@@ -1,9 +1,41 @@
+import { Navigate, useLocation } from 'react-router-dom';
 import { CurrencyDollar, MapPin, Timer } from 'phosphor-react';
-import { SuccessContainer, TitleContainer } from './styles';
 
+import { SuccessContainer, TitleContainer } from './styles';
 import deliveryIllustration from '../../assets/delivery-illustration.svg';
+import { PurchaseFormInputs } from '../Checkout';
+import { useEffect } from 'react';
+import { localStorageUserDataKey } from '../../utils/config';
+
+const paymentMethodText = {
+  credit: 'Cartão de crédito',
+  debit: 'Cartão de débito',
+  money: 'Dinheiro',
+};
 
 export function Success() {
+  const { state: routeState } = useLocation();
+
+  useEffect(() => {
+    document.title = 'Coffee Delivery | Compra realizada com sucesso';
+  }, []);
+
+  useEffect(() => {
+    if (routeState.city) {
+      localStorage.setItem(
+        localStorageUserDataKey,
+        `${routeState.city}, ${routeState.state}`,
+      );
+    }
+  }, [routeState]);
+
+  if (routeState === null) {
+    return <Navigate replace to="/" />;
+  }
+
+  const { address, number, neighborhood, city, state, paymentMethod } =
+    routeState as PurchaseFormInputs;
+
   return (
     <SuccessContainer>
       <div>
@@ -17,8 +49,11 @@ export function Success() {
               <MapPin weight="fill" />
             </span>
             <p>
-              Entrega em <span>Rua João Daniel Martinelli, 102</span> <br />{' '}
-              Farrapos - Porto Alegre, RS
+              Entrega em{' '}
+              <span>
+                {address}, {number}
+              </span>{' '}
+              <br /> {neighborhood} - {city}, {state}
             </p>
           </li>
           <li>
@@ -34,7 +69,8 @@ export function Success() {
               <CurrencyDollar weight="fill" />
             </span>
             <p>
-              Pagamento na entrega <br /> <span>Cartão de Crédito</span>
+              Pagamento na entrega <br />{' '}
+              <span>{paymentMethodText[paymentMethod]}</span>
             </p>
           </li>
         </ul>

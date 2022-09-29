@@ -43,7 +43,17 @@ const BaseButton = styled.button`
   }
 `;
 
-export const UserLocationButton = styled(BaseButton)`
+export const UserLocationButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+
+  padding: 0.5rem;
+  border-radius: 6px;
+
+  cursor: default;
+
   background-color: ${({ theme }) => theme['purple-100']};
   color: ${({ theme }) => theme['purple-700']};
   svg {

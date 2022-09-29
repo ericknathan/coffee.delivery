@@ -5,12 +5,15 @@ import {
   useEffect,
   useReducer,
 } from 'react';
+
 import {
   ActionTypes,
   addItemToCartAction,
+  clearCartAction,
   removeItemFromCartAction,
 } from '../reducers/cart/actions';
 import { cartReducer, Product } from '../reducers/cart/reducer';
+import { localStorageCartStateKey } from '../utils/config';
 
 interface DispatchData {
   type: ActionTypes;
@@ -20,6 +23,7 @@ interface DispatchData {
 export interface CartItem {
   product: Product;
   quantity: number;
+  showToast?: boolean;
 }
 
 type AddItemFormData = CartItem;
@@ -30,6 +34,7 @@ interface CartContextType {
   cartItems: CartItems;
   addItemToCart: (data: AddItemFormData) => void;
   removeItemFromCart: (id: number) => void;
+  clearCart: () => void;
   dispatchCartItemsList: (action: DispatchData) => void;
 }
 
@@ -39,8 +44,6 @@ interface CartContextProviderProps {
 
 export const CartContext = createContext({} as CartContextType);
 
-const localStorageKey = '@coffee-delivery:cart-state-1.0.0';
-
 export function CartContextProvider({ children }: CartContextProviderProps) {
   const [cartState, dispatchCartItemsList] = useReducer(
     cartReducer,
@@ -48,7 +51,7 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
       cartItems: {},
     },
     () => {
-      const storedStateAsJSON = localStorage.getItem(localStorageKey);
+      const storedStateAsJSON = localStorage.getItem(localStorageCartStateKey);
 
       if (storedStateAsJSON) {
         return JSON.parse(storedStateAsJSON);
@@ -65,15 +68,16 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
   useEffect(() => {
     const stateJSON = JSON.stringify(cartState);
 
-    localStorage.setItem(localStorageKey, stateJSON);
+    localStorage.setItem(localStorageCartStateKey, stateJSON);
   }, [cartState]);
 
   function addItemToCart(data: AddItemFormData) {
-    const { product, quantity } = data;
+    const { product, quantity, showToast } = data;
 
     const newItem: CartItem = {
       product,
       quantity,
+      showToast: showToast ?? false,
     };
 
     dispatchCartItemsList(addItemToCartAction(newItem));
@@ -83,12 +87,17 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
     dispatchCartItemsList(removeItemFromCartAction(id));
   }
 
+  function clearCart() {
+    dispatchCartItemsList(clearCartAction());
+  }
+
   return (
     <CartContext.Provider
       value={{
         cartItems,
         addItemToCart,
         removeItemFromCart,
+        clearCart,
         dispatchCartItemsList,
       }}
     >
